@@ -1,0 +1,33 @@
+% Define neighbors of a state
+neighbor(X, Y) :-
+    Y is X + 1.
+neighbor(X, Y) :-
+    Y is X - 1.
+
+% Define the value (score) of a state
+value(X, X).   % Higher numbers = better score
+
+% Hill climbing main algorithm
+hill_climb(Start, Best) :-
+    climb(Start, Best).
+
+% When no neighbor is better → stop
+climb(Current, Current) :-
+    \+ better_neighbor(Current, _), !.
+
+% If there is a better neighbor, move to it
+climb(Current, Best) :-
+    better_neighbor(Current, Next),
+    climb(Next, Best).
+
+% Find a neighbor with a higher value
+better_neighbor(Current, Next) :-
+    neighbor(Current, Next),
+    value(Next, NextValue),
+    value(Current, CurrentValue),
+    NextValue > CurrentValue,
+    !.
+
+run
+?- hill_climb(3, Best).
+
